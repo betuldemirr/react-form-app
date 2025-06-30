@@ -1,94 +1,113 @@
-import React, { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import Checkbox from "../components/Checkbox";
 import Form from "../components/Form";
 
-const CreateUser: React.FC = () => {
-     const [formData, setFormData] = useState({
-          fullname: "",
-          email: "",
-          password: "",
-          remember: false,
+type CreateUserForm = {
+     fullname: string;
+     email: string;
+     password: string;
+     remember: boolean;
+};
+
+export default function CreateUser() {
+     const methods = useForm<CreateUserForm>({
+          defaultValues: {
+               fullname: "",
+               email: "",
+               password: "",
+               remember: false,
+          },
      });
 
-     const [errors, setErrors] = useState({
-          email: "",
-          password: "",
-     });
+     const { control, handleSubmit } = methods;
 
-     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-          const { name, value, type, checked } = e.target;
-          setFormData((prev) => ({
-               ...prev,
-               [name]: type === "checkbox" ? checked : value,
-          }));
-
-          if (errors[name as keyof typeof errors]) {
-               setErrors((prev) => ({ ...prev, [name]: "" }));
-          }
-     };
-
-     const onSubmit = (e: React.FormEvent) => {
-          e.preventDefault();
-
-          const newErrors = {
-               email: formData.email ? "" : "Please enter your email!",
-               password: formData.password ? "" : "Please enter your password!",
-          };
-
-          setErrors(newErrors);
-
-          const hasErrors = Object.values(newErrors).some((val) => val !== "");
-          if (hasErrors) return;
-
-          console.log("Form submitted:", formData);
+     const onSubmit = (data: CreateUserForm) => {
+          console.log("Data:", data);
      };
 
      return (
           <div className="min-h-screen flex items-center justify-center px-4">
-               <Form onSubmit={onSubmit}>
-                    <Input
-                         label="Fullname:"
+               <Form methods={methods} onSubmit={onSubmit}>
+                    <Controller
                          name="fullname"
-                         value={formData.fullname}
-                         onChange={onInputChange}
+                         control={control}
+                         render={({ field, fieldState }) => (
+                              <Input
+                                   label="Fullname:"
+                                   value={field.value}
+                                   onChange={field.onChange}
+                                   error={fieldState.error?.message}
+                              />
+                         )}
                     />
-                    <Input
-                         label="Mail:"
+                    <Controller
                          name="email"
-                         value={formData.email}
-                         onChange={onInputChange}
-                         error={errors.email}
+                         control={control}
+                         rules={{
+                              required: "Email is required",
+                              pattern: {
+                                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                   message: "Invalid email format",
+                              },
+                         }}
+                         render={({ field, fieldState }) => (
+                              <Input
+                                   label="Mail:"
+                                   value={field.value}
+                                   onChange={field.onChange}
+                                   error={fieldState.error?.message}
+                                   required
+                              />
+                         )}
                     />
-                    <Input
-                         label="Password:"
+                    <Controller
                          name="password"
-                         value={formData.password}
-                         onChange={onInputChange}
-                         error={errors.password}
-                         type="password"
+                         control={control}
+                         rules={{
+                              required: "Password is required",
+                              pattern: {
+                                   value: /^[a-zA-Z0-9]+$/,
+                                   message: "Password must be alphanumeric",
+                              },
+                         }}
+                         render={({ field, fieldState }) => (
+                              <Input
+                                   label="Password:"
+                                   type="password"
+                                   value={field.value}
+                                   onChange={field.onChange}
+                                   error={fieldState.error?.message}
+                                   required
+                              />
+                         )}
                     />
-                    <div className="mb-4">
-                         <Checkbox
-                              name="remember"
-                              checked={formData.remember}
-                              onChange={(e) =>
-                                   setFormData((prev) => ({
-                                        ...prev,
-                                        remember: e.target.checked,
-                                   }))
-                              }
-                         >
-                              Remember me
-                         </Checkbox>
+                    <div className="mb-4 grid grid-cols-12 items-center">
+                         <div className="col-start-4 col-span-9">
+                              <Controller
+                                   name="remember"
+                                   control={control}
+                                   render={({ field }) => (
+                                        <Checkbox
+                                             name="remember"
+                                             checked={field.value}
+                                             onChange={field.onChange}
+                                        >
+                                             Remember me
+                                        </Checkbox>
+                                   )}
+                              />
+                         </div>
                     </div>
-                    <Button type="primary" htmlType="submit">
-                         Submit
-                    </Button>
+                    <div className="grid grid-cols-12">
+                         <div className="col-start-4 col-span-9">
+                              <Button htmlType="submit" type="primary">
+                                   Submit
+                              </Button>
+                         </div>
+                    </div>
                </Form>
           </div>
      );
-};
-
-export default CreateUser;
+}

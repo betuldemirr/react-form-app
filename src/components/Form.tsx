@@ -1,13 +1,35 @@
-type FormProps = {
+import React from 'react';
+import { Form as AntForm } from 'antd';
+import { FormProvider } from 'react-hook-form';
+import type { UseFormReturn, FieldValues } from 'react-hook-form';
+
+type FormProps<T extends FieldValues> = {
+     methods: UseFormReturn<T>;
+     onSubmit: (data: T) => void;
      children: React.ReactNode;
-     onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+     className?: string;
+     layout?: 'vertical' | 'horizontal' | 'inline';
 };
 
-const Form = ({ children, onSubmit }: FormProps) => {
+const Form = <T extends FieldValues>({
+     methods,
+     onSubmit,
+     children,
+     className = '',
+     layout = 'vertical',
+}: FormProps<T>) => {
+     const { handleSubmit } = methods;
+
      return (
-          <form onSubmit={onSubmit} className="w-full max-w-md mx-auto p-4">
-               {children}
-          </form>
+          <FormProvider {...methods}>
+               <AntForm
+                    layout={layout}
+                    className={`${className}`}
+                    onFinish={handleSubmit(onSubmit)}
+               >
+                    {children}
+               </AntForm>
+          </FormProvider>
      );
 };
 

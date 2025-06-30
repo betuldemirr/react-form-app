@@ -1,14 +1,14 @@
 import { Button as AntButton } from "antd";
+import type { ButtonProps as AntButtonProps } from "antd";
 
-type ButtonProps = {
+type ButtonProps = AntButtonProps & {
      children: React.ReactNode;
-     htmlType?: "button" | "submit" | "reset";
-     type?: "primary" | "default" | "text";
+     className?: string;
 };
 
-const Button = ({ children, htmlType = "button", type = "primary" }: ButtonProps) => {
+const Button = ({ children, className, ...props }: ButtonProps) => {
      return (
-          <AntButton type={type} htmlType={htmlType}>
+          <AntButton className={className} {...props}>
                {children}
           </AntButton>
      );
