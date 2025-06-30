@@ -1,6 +1,6 @@
 import { Checkbox as AntCheckbox, type CheckboxChangeEvent } from "antd";
 
-type CheckboxProps = {
+interface CheckboxProps {
      name: string;
      checked: boolean;
      onChange: (value: boolean) => void;

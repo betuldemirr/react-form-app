@@ -3,7 +3,7 @@ import { Form as AntForm } from 'antd';
 import { FormProvider } from 'react-hook-form';
 import type { UseFormReturn, FieldValues } from 'react-hook-form';
 
-type FormProps<T extends FieldValues> = {
+interface FormProps<T extends FieldValues> {
      methods: UseFormReturn<T>;
      onSubmit: (data: T) => void;
      children: React.ReactNode;

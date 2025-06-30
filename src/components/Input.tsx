@@ -1,7 +1,7 @@
 import { Input as AntInput, Typography } from 'antd';
 const { Text } = Typography;
 
-type InputProps = {
+interface InputProps {
      label?: string;
      value?: string;
      onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;

@@ -3,16 +3,13 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import Checkbox from "../components/Checkbox";
 import Form from "../components/Form";
-
-type CreateUserForm = {
-     fullname: string;
-     email: string;
-     password: string;
-     remember: boolean;
-};
+import { useNavigate } from "react-router-dom";
+import type { User } from "../model/user";
 
 export default function CreateUser() {
-     const methods = useForm<CreateUserForm>({
+     const navigate = useNavigate();
+
+     const methods = useForm<User>({
           defaultValues: {
                fullname: "",
                email: "",
@@ -23,8 +20,8 @@ export default function CreateUser() {
 
      const { control, handleSubmit } = methods;
 
-     const onSubmit = (data: CreateUserForm) => {
-          console.log("Data:", data);
+     const onSubmit = (data: User) => {
+          navigate("/users", { state: data });
      };
 
      return (
