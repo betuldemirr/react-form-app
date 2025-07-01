@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import Card from "../components/Card";
 import type { User } from "../model/user";
 
-export default function Users() {
+export default function User() {
      const location = useLocation();
      const user = location.state as User | undefined;
 

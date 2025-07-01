@@ -38,7 +38,7 @@ export default function CreateUser() {
           } else {
                localStorage.removeItem(LOCAL_STORAGE_KEY);
           }
-          navigate("/users", { state: data });
+          navigate("/user", { state: data });
      };
 
      return (
