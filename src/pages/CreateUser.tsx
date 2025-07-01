@@ -22,7 +22,7 @@ export default function CreateUser() {
           },
      });
 
-     const { control, handleSubmit, reset, watch } = methods;
+     const { control, reset } = methods;
      const [showPassword, setShowPassword] = useState(false);
 
      useEffect(() => {

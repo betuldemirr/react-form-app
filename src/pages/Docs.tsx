@@ -1,6 +1,5 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import Input from "../components/Input";
-import Button from "../components/Button";
 import type { InputRef } from "antd";
 
 export default function Docs() {
