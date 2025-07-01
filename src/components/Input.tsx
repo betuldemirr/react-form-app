@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, type ReactNode } from 'react';
 import { Input as AntInput, Typography, type InputRef } from 'antd';
 
 const { Text } = Typography;
@@ -15,6 +15,8 @@ interface InputProps {
      onChange?: React.ChangeEventHandler<HTMLInputElement>;
      onBlur?: React.FocusEventHandler<HTMLInputElement>;
      name?: string;
+     icon?: ReactNode;
+     onIconClick?: () => void;
 }
 
 const Input = forwardRef<InputRef, InputProps>((props, ref) => {
@@ -30,6 +32,8 @@ const Input = forwardRef<InputRef, InputProps>((props, ref) => {
           onChange,
           onBlur,
           name,
+          icon,
+          onIconClick,
      } = props;
 
      return (
@@ -38,8 +42,7 @@ const Input = forwardRef<InputRef, InputProps>((props, ref) => {
                     <label className="col-span-3 text-right pr-2 font-medium text-sm pt-2">
                          {required && <span className="text-red-500">*</span>} {label}
                     </label>
-
-                    <div className="col-span-9">
+                    <div className="col-span-9 relative">
                          <AntInput
                               name={name}
                               placeholder={placeholder}
@@ -52,6 +55,18 @@ const Input = forwardRef<InputRef, InputProps>((props, ref) => {
                               onBlur={onBlur}
                               ref={ref}
                          />
+                         {icon && (
+                              <div
+                                   onClick={onIconClick}
+                                   className="absolute right-2 top-1/3 -translate-y-1/2 cursor-pointer text-gray-600"
+                                   style={{ zIndex: 10 }}
+                                   role="button"
+                                   tabIndex={0}
+                                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onIconClick?.(); }}
+                              >
+                                   {icon}
+                              </div>
+                         )}
                          <div className="min-h-[0.75rem] mt-1">
                               {error && (
                                    <Text type="danger" className="text-sm">

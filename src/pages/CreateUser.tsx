@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import Input from "../components/Input";
 import Button from "../components/Button";
@@ -6,6 +6,7 @@ import Checkbox from "../components/Checkbox";
 import Form from "../components/Form";
 import { useNavigate } from "react-router-dom";
 import type { User } from "../model/user";
+import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 const LOCAL_STORAGE_KEY = "userFormData";
 
@@ -22,6 +23,7 @@ export default function CreateUser() {
      });
 
      const { control, handleSubmit, reset, watch } = methods;
+     const [showPassword, setShowPassword] = useState(false);
 
      useEffect(() => {
           const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -87,10 +89,12 @@ export default function CreateUser() {
                          render={({ field, fieldState }) => (
                               <Input
                                    label="Password:"
-                                   type="password"
+                                   type={showPassword ? 'text' : 'password'}
                                    value={field.value}
                                    onChange={field.onChange}
                                    error={fieldState.error?.message}
+                                   icon={showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+                                   onIconClick={() => setShowPassword((prev) => !prev)}
                                    required
                               />
                          )}
