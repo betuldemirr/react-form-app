@@ -1,27 +1,37 @@
-import { Input as AntInput, Typography } from 'antd';
+import React, { forwardRef } from 'react';
+import { Input as AntInput, Typography, type InputRef } from 'antd';
+
 const { Text } = Typography;
 
 interface InputProps {
      label?: string;
-     value?: string;
-     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+     error?: string;
+     required?: boolean;
      placeholder?: string;
      type?: string;
      disabled?: boolean;
-     error?: string;
-     required?: boolean;
-};
+     defaultValue?: string;
+     value?: string;
+     onChange?: React.ChangeEventHandler<HTMLInputElement>;
+     onBlur?: React.FocusEventHandler<HTMLInputElement>;
+     name?: string;
+}
 
-const Input: React.FC<InputProps> = ({
-     label,
-     value,
-     onChange,
-     placeholder = '',
-     type = 'text',
-     disabled = false,
-     error,
-     required = false,
-}) => {
+const Input = forwardRef<InputRef, InputProps>((props, ref) => {
+     const {
+          label,
+          error,
+          required = false,
+          placeholder = '',
+          type = 'text',
+          disabled = false,
+          defaultValue,
+          value,
+          onChange,
+          onBlur,
+          name,
+     } = props;
+
      return (
           <div className="mb-4">
                <div className="grid grid-cols-12 items-start gap-2">
@@ -31,12 +41,16 @@ const Input: React.FC<InputProps> = ({
 
                     <div className="col-span-9">
                          <AntInput
-                              value={value}
-                              onChange={onChange}
+                              name={name}
                               placeholder={placeholder}
                               type={type}
                               disabled={disabled}
                               status={error ? 'error' : ''}
+                              value={value}
+                              defaultValue={defaultValue}
+                              onChange={onChange}
+                              onBlur={onBlur}
+                              ref={ref}
                          />
                          <div className="min-h-[0.75rem] mt-1">
                               {error && (
@@ -49,6 +63,8 @@ const Input: React.FC<InputProps> = ({
                </div>
           </div>
      );
-};
+});
+
+Input.displayName = 'Input';
 
 export default Input;

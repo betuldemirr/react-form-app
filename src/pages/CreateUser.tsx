@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import Input from "../components/Input";
 import Button from "../components/Button";
@@ -5,6 +6,8 @@ import Checkbox from "../components/Checkbox";
 import Form from "../components/Form";
 import { useNavigate } from "react-router-dom";
 import type { User } from "../model/user";
+
+const LOCAL_STORAGE_KEY = "userFormData";
 
 export default function CreateUser() {
      const navigate = useNavigate();
@@ -18,9 +21,21 @@ export default function CreateUser() {
           },
      });
 
-     const { control, handleSubmit } = methods;
+     const { control, handleSubmit, reset, watch } = methods;
+
+     useEffect(() => {
+          const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+          if (savedData) {
+               reset(JSON.parse(savedData));
+          }
+     }, [reset]);
 
      const onSubmit = (data: User) => {
+          if (data.remember) {
+               localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+          } else {
+               localStorage.removeItem(LOCAL_STORAGE_KEY);
+          }
           navigate("/users", { state: data });
      };
 
